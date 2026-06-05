@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Admin Rifa</title>
+</head>
+
+<body>
+
+<h1>🔥 PANEL ADMIN RIFA</h1>
+
+<button onclick="ganador()">🎲 Hacer sorteo</button>
+
+<div id="ventas"></div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  updateDoc,
+  doc,
+  addDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBHwQNWakMY0CDphF2IQab2ZUpeklOeE8s",
+  authDomain: "rifa-boxer-ct100.firebaseapp.com",
+  projectId: "rifa-boxer-ct100",
+  storageBucket: "rifa-boxer-ct100.appspot.com",
+  messagingSenderId: "389698810798",
+  appId: "1:389698810798:web:3cf895f3341130a9d48e3f"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const contenedor = document.getElementById("ventas");
+
+
+// 📊 CARGAR VENTAS
+async function cargar() {
+
+  const snap = await getDocs(collection(db, "ventas"));
+
+  contenedor.innerHTML = "";
+
+  snap.forEach(d => {
+
+    let data = d.data();
+
+    contenedor.innerHTML += `
+      <div style="border:1px solid black; margin:10px; padding:10px;">
+        <p>Nombre: ${data.nombre}</p>
+        <p>Tel: ${data.telefono}</p>
+        <p>Cantidad: ${data.cantidad}</p>
+        <p>Estado: ${data.estado}</p>
+
+        <button onclick="aprobar('${d.id}', ${data.cantidad})">Aprobar</button>
+        <button onclick="rechazar('${d.id}')">Rechazar</button>
+      </div>
+    `;
+  });
+}
+
+
+// 🎲 GENERAR NÚMEROS SIN REPETIR
+async function generarNumerosUnicos(cantidad) {
+
+  const snap = await getDocs(collection(db, "ventas"));
+
+  let usados = new Set();
+
+  snap.forEach(d => {
+    let data = d.data();
+    (data.numeros || []).forEach(n => usados.add(n));
+  });
+
+  let nuevos = [];
+
+  while (nuevos.length < cantidad) {
+
+    let num = String(Math.floor(Math.random() * 9999)).padStart(4, "0");
+
+    if (!usados.has(num)) {
+      usados.add(num);
+      nuevos.push(num);
+    }
+  }
+
+  return nuevos;
+}
+
+
+// ✅ APROBAR
+window.aprobar = async function(id, cantidad) {
+
+  const numeros = await generarNumerosUnicos(cantidad);
+
+  await updateDoc(doc(db, "ventas", id), {
+    estado: "aprobado",
+    numeros: numeros
+  });
+
+  alert("Aprobado con números asignados");
+  cargar();
+};
+
+
+// ❌ RECHAZAR
+window.rechazar = async function(id) {
+
+  await updateDoc(doc(db, "ventas", id), {
+    estado: "rechazado"
+  });
+
+  alert("Rechazado");
+  cargar();
+};
+
+
+// 🎲 SORTEO
+window.ganador = async function() {
+
+  const snap = await getDocs(collection(db, "ventas"));
+
+  let participantes = [];
+
+  snap.forEach(d => {
+
+    let data = d.data();
+
+    if (data.estado === "aprobado") {
+      participantes.push(data);
+    }
+  });
+
+  if (participantes.length === 0) {
+    alert("No hay ventas aprobadas");
+    return;
+  }
+
+  let numeroGanador = String(Math.floor(Math.random() * 9999)).padStart(4, "0");
+
+  let ganador = null;
+
+  participantes.forEach(p => {
+    if (p.numeros.includes(numeroGanador)) {
+      ganador = p.nombre;
+    }
+  });
+
+  alert(
+    "Número ganador: " + numeroGanador +
+    (ganador ? " | 🎉 Ganador: " + ganador : " | ❌ Sin ganador")
+  );
+};
+
+
+// iniciar
+cargar();
+
+</script>
+
+</body>
+</html>
