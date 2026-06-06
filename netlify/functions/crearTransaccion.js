@@ -2,43 +2,39 @@ const axios = require("axios");
 const crypto = require("crypto");
 
 exports.handler = async (event) => {
-
-  if (!event.body) {
-  return {
-    statusCode: 400,
-    body: JSON.stringify({ error: "No se recibieron datos" })
-  };
-}
-
-  const { nombre, telefono, correo, numeros } = JSON.parse(event.body);
-
-  const amount = numeros.length * 4000 * 100;
-
-  const reference = Date.now().toString();
-
-  // 🔥 IMPORTANTE: tu integrity key de Wompi
- const integrityKey = process.env.WOMPI_INTEGRITY_KEY;
-
-  const signature = crypto
-    .createHash("sha256")
-    .update(reference + amount + "COP" + integrityKey)
-    .digest("hex");
-
   try {
+    const { nombre, telefono, correo, numeros } = JSON.parse(event.body);
+
+    const amount = numeros.length * 4000 * 100;
+    const reference = Date.now().toString();
+
+    const integrityKey = process.env.WOMPI_INTEGRITY_KEY;
+
+    if (!integrityKey) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: "Falta WOMPI_INTEGRITY_KEY" })
+      };
+    }
+
+    const signature = crypto
+      .createHash("sha256")
+      .update(reference + amount + "COP" + integrityKey)
+      .digest("hex");
 
     const response = await axios.post(
-      ""https://sandbox.wompi.co/v1/transactions"",
+      "https://sandbox.wompi.co/v1/transactions",
       {
         amount_in_cents: amount,
         currency: "COP",
         reference,
         customer_email: correo,
-        signature: signature,
-        redirect_url: "https://tusitio.com/gracias"
+        signature,
+        redirect_url: "https://rifamym.netlify.app"
       },
       {
         headers: {
-          Authorization: "Bearer prv_test_x2oEtJxKeTq3yMuVoYhmHSb9SzXNxI17"
+          Authorization: "Bearer TU_PUBLIC_KEY_SANDBOX"
         }
       }
     );
@@ -52,11 +48,13 @@ exports.handler = async (event) => {
     };
 
   } catch (error) {
-    console.log(error.response?.data || error.message);
+    console.log("ERROR WOMPI:", error.response?.data || error.message);
 
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Error creando transacción" })
+      body: JSON.stringify({
+        error: error.response?.data || error.message
+      })
     };
   }
 };
