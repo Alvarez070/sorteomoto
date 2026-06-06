@@ -4,7 +4,8 @@ import {
   getDoc,
   updateDoc,
   addDoc,
-  onSnapshot
+  onSnapshot,
+  setDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const db = window.db;
@@ -147,7 +148,13 @@ async function reservarNumeros(numeros, usuario) {
     const snap = await getDoc(ref);
 
     if (!snap.exists()) {
-      throw new Error("Número no existe: " + num);
+
+      await setDoc(ref, {
+        estado: "reservado",
+        usuario
+      });
+
+      continue;
     }
 
     if (snap.data().estado !== "disponible") {
@@ -159,6 +166,14 @@ async function reservarNumeros(numeros, usuario) {
       usuario
     });
   }
+
+  await addDoc(collection(db, "reservas"), {
+    numeros,
+    usuario,
+    estado: "pendiente",
+    expira: Date.now() + 10 * 60 * 1000
+  });
+}
 
   await addDoc(collection(db, "reservas"), {
     numeros,
