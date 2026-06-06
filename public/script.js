@@ -175,14 +175,6 @@ async function reservarNumeros(numeros, usuario) {
   });
 }
 
-  await addDoc(collection(db, "reservas"), {
-    numeros,
-    usuario,
-    estado: "pendiente",
-    expira: Date.now() + 10 * 60 * 1000
-  });
-}
-
 /* =========================
    PAGAR
 ========================= */
