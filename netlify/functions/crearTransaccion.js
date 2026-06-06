@@ -5,66 +5,12 @@ exports.handler = async (event) => {
   try {
     const { nombre, telefono, correo, numeros } = JSON.parse(event.body || "{}");
 
-    const amount = numeros.length * 4000 * 100;
-    const reference = Date.now().toString();
-
-    const integrityKey = process.env.WOMPI_INTEGRITY_KEY;
-
-    if (!integrityKey) {
+    if (!numeros || !Array.isArray(numeros)) {
       return {
-        statusCode: 500,
-        body: JSON.stringify({ error: "Falta WOMPI_INTEGRITY_KEY" })
+        statusCode: 400,
+        body: JSON.stringify({ error: "Números inválidos" })
       };
     }
-
-    // 🔐 firma correcta Wompi
-    const signature = crypto
-      .createHash("sha256")
-      .update(reference + amount + "COP" + integrityKey)
-      .digest("hex");
-
-    // 🚀 CREAR TRANSACCIÓN (SANDBOX CORRECTO)
-    const response = await axios.post(
-      "https://sandbox.wompi.co/v1/transactions",
-      {
-        amount_in_cents: amount,
-        currency: "COP",
-        reference,
-        customer_email: correo,
-        signature,
-        redirect_url: "https://rifamym.netlify.app"
-      },
-      {
-        headers: {
-          Authorization: "Bearer TU_PRIVATE_KEY_SANDBOX"
-        }
-      }
-    );
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        checkoutUrl: response.data.data.checkout_url,
-        reference
-      })
-    };
-
-  } catch (error) {
-    console.log("WOMPI ERROR:", error.response?.data || error.message);
-
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        error: error.response?.data || error.message
-      })
-    };
-  }
-};const axios = require("axios");
-const crypto = require("crypto");
-
-exports.handler = async (event) => {
-  try {
-    const { nombre, telefono, correo, numeros } = JSON.parse(event.body || "{}");
 
     const amount = numeros.length * 4000 * 100;
     const reference = Date.now().toString();
@@ -78,13 +24,13 @@ exports.handler = async (event) => {
       };
     }
 
-    // 🔐 firma correcta Wompi
+    // 🔐 firma correcta
     const signature = crypto
       .createHash("sha256")
       .update(reference + amount + "COP" + integrityKey)
       .digest("hex");
 
-    // 🚀 CREAR TRANSACCIÓN (SANDBOX CORRECTO)
+    // 🚀 Wompi Sandbox (CORRECTO)
     const response = await axios.post(
       "https://sandbox.wompi.co/v1/transactions",
       {
