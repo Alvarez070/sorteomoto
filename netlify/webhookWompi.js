@@ -11,25 +11,44 @@ const db = admin.firestore();
 exports.handler = async (event) => {
 
   const body = JSON.parse(event.body);
-
   const transaction = body.data?.transaction;
 
   if (transaction?.status === "APPROVED") {
 
-    const referencia = transaction.reference;
+    const reference = transaction.reference;
 
-    const nombre = transaction.customer_data?.full_name || "sin nombre";
+    // 🔥 buscar reservas activas
+    const reservasSnap = await db.collection("reservas")
+      .where("estado", "==", "pendiente")
+      .get();
 
-    const numeros = await generarNumerosUnicos(db, 1);
+    reservasSnap.forEach(async (docu) => {
 
-    await db.collection("ventas").add({
-      nombre,
-      telefono: "N/A",
-      cantidad: 1,
-      numeros,
-      estado: "pagado",
-      referencia,
-      fecha: new Date()
+      const data = docu.data();
+
+      if (data.expira < Date.now()) return;
+
+      // ✔ pasar a ventas
+      await db.collection("ventas").add({
+        nombre: data.usuario,
+        telefono: data.telefono,
+        correo: data.correo,
+        numeros: data.numeros,
+        estado: "pagado",
+        referencia
+      });
+
+      // ✔ marcar números como vendidos
+      for (let num of data.numeros) {
+        await db.collection("numeros_usados").doc(num).update({
+          estado: "vendido"
+        });
+      }
+
+      // ✔ cerrar reserva
+      await docu.ref.update({
+        estado: "pagado"
+      });
     });
   }
 
@@ -38,31 +57,3 @@ exports.handler = async (event) => {
     body: "ok"
   };
 };
-
-
-// 🎲 GENERADOR
-async function generarNumerosUnicos(db, cantidad) {
-
-  const snap = await db.collection("ventas").get();
-
-  let usados = new Set();
-
-  snap.forEach(d => {
-    let data = d.data();
-    (data.numeros || []).forEach(n => usados.add(n));
-  });
-
-  let nuevos = [];
-
-  while (nuevos.length < cantidad) {
-
-    let num = String(Math.floor(Math.random() * 9999)).padStart(4, "0");
-
-    if (!usados.has(num)) {
-      usados.add(num);
-      nuevos.push(num);
-    }
-  }
-
-  return nuevos;
-}

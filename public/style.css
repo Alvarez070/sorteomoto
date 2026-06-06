@@ -1,48 +1,224 @@
-body{
-    background:black;
-    color:white;
-    text-align:center;
-    font-family:Arial, sans-serif;
+*{
     margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#0f172a;
+    color:white;
+    font-family:Arial, sans-serif;
 }
 
 header{
-    background:#111;
-    padding:20px;
+    background:linear-gradient(135deg,#dc2626,#991b1b);
+    padding:25px;
+    text-align:center;
+    box-shadow:0 3px 15px rgba(0,0,0,.3);
+}
+
+header h1{
+    font-size:32px;
+    margin-bottom:10px;
 }
 
 .contenedor{
-    width:90%;
-    max-width:800px;
-    margin:auto;
+    max-width:900px;
+    margin:20px auto;
     padding:20px;
+}
+
+.card{
+    background:#1e293b;
+    border-radius:15px;
+    padding:20px;
+    margin-bottom:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,.3);
 }
 
 .moto{
     width:100%;
-    border-radius:10px;
+    border-radius:15px;
+    margin-bottom:20px;
 }
 
-.barra{
+h2{
+    margin-bottom:15px;
+}
+
+input,
+textarea{
     width:100%;
-    height:35px;
-    background:#ddd;
-    border-radius:20px;
-    overflow:hidden;
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    margin-top:10px;
+    margin-bottom:15px;
+    font-size:16px;
 }
 
-.progreso{
-    width:0%;
-    height:100%;
-    background:green;
+textarea{
+    min-height:180px;
+    resize:vertical;
 }
 
 button{
-    background:red;
+    background:#dc2626;
     color:white;
     border:none;
     padding:15px 25px;
     border-radius:10px;
     font-size:18px;
     cursor:pointer;
+    transition:.3s;
+    margin:5px;
+}
+
+button:hover{
+    background:#b91c1c;
+}
+
+.barra{
+    width:100%;
+    height:35px;
+    background:#334155;
+    border-radius:30px;
+    overflow:hidden;
+    margin-top:10px;
+}
+
+.progreso{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#22c55e,#16a34a);
+    transition:.5s;
+}
+
+#textoProgreso{
+    margin-top:10px;
+    font-weight:bold;
+}
+
+.total{
+    font-size:24px;
+    font-weight:bold;
+    color:#22c55e;
+    margin:15px 0;
+}
+
+.premios{
+    text-align:left;
+    line-height:1.8;
+}
+
+footer{
+    text-align:center;
+    padding:20px;
+    color:#94a3b8;
+}
+
+@media(max-width:768px){
+
+    header h1{
+        font-size:24px;
+    }
+
+    button{
+        width:100%;
+    }
+} .estadisticas{
+text-align:center;
+}
+
+.numeros-info{
+display:flex;
+justify-content:space-around;
+margin:20px 0;
+}
+
+.dato h3{
+color:#22c55e;
+font-size:30px;
+}
+
+.responsable{
+background:#0f172a;
+padding:15px;
+border-radius:10px;
+margin-top:15px;
+text-align:center;
+}
+
+.btn-whatsapp{
+display:inline-block;
+margin-top:10px;
+background:#25D366;
+color:white;
+text-decoration:none;
+padding:12px 20px;
+border-radius:10px;
+font-weight:bold;
+}
+
+.btn-whatsapp:hover{
+opacity:.9;
+}
+
+.reglas ul{
+padding-left:20px;
+line-height:2;
+}
+
+#mensajeNumeros{
+margin-bottom:15px;
+font-weight:bold;
+color:#fbbf24;
+}
+
+footer a{
+color:#22c55e;
+text-decoration:none;
+}
+/* =========================
+   🎰 TABLERO PRO
+========================= */
+
+#tableroNumeros {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 5px;
+  margin-top: 15px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.numero {
+  padding: 8px;
+  text-align: center;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  user-select: none;
+}
+
+.disponible {
+  background: #22c55e;
+  color: black;
+}
+
+.reservado {
+  background: #fbbf24;
+  color: black;
+  cursor: not-allowed;
+}
+
+.vendido {
+  background: #ef4444;
+  color: white;
+  cursor: not-allowed;
+}
+
+.seleccionado {
+  background: #3b82f6 !important;
+  color: white;
 }

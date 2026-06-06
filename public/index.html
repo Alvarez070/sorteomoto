@@ -1,37 +1,207 @@
-<header>
-  <h1>BOXER CT 100 O 7 MILLONES</h1>
+<!DOCTYPE html>
 
-  <p style="color:yellow; font-size:16px;">
-    🎟 Sorteo: 18 de diciembre de 2026 - Lotería de Medellín <br>
-    💰 Todos los pagos se procesan automáticamente con Wompi
-  </p>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOXER CT 100 O 7 MILLONES</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+
+<h1>🏍️ BOXER CT 100 O $7.000.000</h1>
+
+<p>
+🎟 Sorteo Final: 18 de diciembre de 2026<br>
+🏆 Lotería de Medellín<br>
+💳 Pagos seguros con Wompi
+</p>
+
 </header>
 
 <div class="contenedor">
 
+<div class="card">
+
 <img src="moto.jpg" class="moto">
 
-<h2>9999 NÚMEROS DISPONIBLES (0000 - 9999)</h2>
-<h3>Valor por número: $4.000</h3>
+<h2>🔥 Premio Principal</h2>
 
-<p>Participa y gana una Boxer CT 100 o 7 millones de pesos.</p>
-
-<hr>
-
-<h2>Comprar Números</h2>
-
-<input type="text" id="nombre" placeholder="Tu nombre"><br><br>
-<input type="tel" id="telefono" placeholder="Tu teléfono"><br><br>
-<input type="number" id="cantidad" min="1" value="1"><br><br>
-
-<button onclick="calcularTotal()">Calcular Total</button>
-<h3 id="total"></h3>
-
-<!-- 🔥 ESTE ES EL BOTÓN IMPORTANTE -->
-<button onclick="pagar()">💳 Pagar y participar</button>
-
-<hr>
-
-<p>Nequi: <strong>3116228716</strong></p>
+<p>
+Gana una Boxer CT 100 o $7.000.000 en efectivo.
+</p>
 
 </div>
+
+<div class="card estadisticas">
+
+<h2>📊 Estado de la Rifa</h2>
+
+<div class="numeros-info">
+
+<div class="dato">
+<h3 id="vendidos">0</h3>
+<p>Vendidos</p>
+</div>
+
+<div class="dato">
+<h3 id="disponibles">10000</h3>
+<p>Disponibles</p>
+</div>
+
+</div>
+
+<div class="barra">
+<div class="progreso" id="barraProgreso"></div>
+</div>
+
+<p id="textoProgreso">Cargando...</p>
+
+</div>
+
+<div class="card premios">
+
+<h2>🎁 Premios</h2>
+
+<p>📅 Todos los viernes desde agosto: $100.000</p>
+
+<p>📅 11 de diciembre: $100.000 + $1.000.000 al número invertido</p>
+
+<p>📅 18 de diciembre: Boxer CT 100 o $7.000.000 + $1.000.000 al número invertido</p>
+
+</div>
+
+<div class="card">
+
+<h2>📝 Comprar Números</h2>
+
+<input type="text" id="nombre" placeholder="Nombre completo">
+
+<input type="tel" id="telefono" placeholder="Teléfono">
+
+<input type="email" id="correo" placeholder="Correo electrónico">
+
+<h3>Números que deseas comprar</h3>
+
+<p>
+Escribe un número por línea.<br>
+Mínimo 3 números.
+</p>
+
+<textarea
+id="numeros"
+placeholder="4267&#10;1234&#10;9000">
+</textarea>
+<!-- =========================
+     🎰 TABLERO PRO
+========================= -->
+<div class="card">
+
+<h2>🎰 Elegir números en tablero</h2>
+
+<button onclick="abrirTablero()">
+  🎲 Abrir tablero
+</button>
+
+<div id="seleccionInfo">
+  <p><b>Números seleccionados:</b></p>
+  <p id="listaSeleccionados">Ninguno</p>
+</div>
+
+<div id="tableroContainer" style="display:none;">
+
+  <h3>Selecciona tus números</h3>
+
+  <div id="tableroNumeros"></div>
+
+  <button onclick="cerrarTablero()">
+    ✔ Usar estos números
+  </button>
+
+</div>
+</div>
+
+<div id="mensajeNumeros"></div>
+
+<button onclick="calcularTotal()">
+💰 Calcular Total
+</button>
+
+<div id="total" class="total">
+Total: $0
+</div>
+
+<button onclick="pagar()">
+💳 Pagar y Participar
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>👥 Responsables</h2>
+
+<div class="responsable">
+
+<h3>Maik Alvarez</h3>
+
+<p>CC: 1025651150</p>
+
+<a href="https://wa.me/573116228716" target="_blank" class="btn-whatsapp">
+📱 WhatsApp
+</a>
+
+</div>
+
+<div class="responsable">
+
+<h3>Maria Jose Rodas</h3>
+
+<p>CC: 1027740904</p>
+
+<a href="https://wa.me/573114056272" target="_blank" class="btn-whatsapp">
+📱 WhatsApp
+</a>
+
+</div>
+
+</div>
+
+<div class="card reglas">
+
+<h2>📜 Reglamento</h2>
+
+<ul>
+<li>Valor por número: $4.000</li>
+<li>Compra mínima: 3 números</li>
+<li>No se repiten números vendidos</li>
+<li>Una vez pagado no hay cambios</li>
+<li>El ganador se define con la Lotería de Medellín</li>
+</ul>
+
+</div>
+
+</div>
+
+<footer>
+
+<p>© 2026 Rifa Boxer CT 100</p>
+
+<p>
+Soporte:
+<a href="https://wa.me/573116228716">
+311 622 8716
+</a>
+</p>
+
+</footer>
+
+<script type="module" src="./firebase.js"></script>
+<script type="module" src="./script.js"></script>
+
+</body>
+</html>
