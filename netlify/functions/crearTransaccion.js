@@ -3,6 +3,13 @@ const crypto = require("crypto");
 
 exports.handler = async (event) => {
 
+  if (!event.body) {
+  return {
+    statusCode: 400,
+    body: JSON.stringify({ error: "No se recibieron datos" })
+  };
+}
+
   const { nombre, telefono, correo, numeros } = JSON.parse(event.body);
 
   const amount = numeros.length * 4000 * 100;
@@ -10,7 +17,7 @@ exports.handler = async (event) => {
   const reference = Date.now().toString();
 
   // 🔥 IMPORTANTE: tu integrity key de Wompi
-  const integrityKey = process.env.WOMPI_INTEGRITY_KEY = jgmyAg52QEoFaTLEokjGJfJW97H2ll4j;
+ const integrityKey = process.env.WOMPI_INTEGRITY_KEY;
 
   const signature = crypto
     .createHash("sha256")
@@ -20,7 +27,7 @@ exports.handler = async (event) => {
   try {
 
     const response = await axios.post(
-      "https://production.wompi.co/v1/transactions",
+      ""https://sandbox.wompi.co/v1/transactions"",
       {
         amount_in_cents: amount,
         currency: "COP",
