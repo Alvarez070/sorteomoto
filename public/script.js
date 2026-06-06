@@ -215,13 +215,15 @@ window.pagar = async function () {
       })
     });
 
-    const data = await res.json();
+ const data = await res.json();
 
-    if (data.checkoutUrl) {
-      window.location.href = data.checkoutUrl;
-    } else {
-      alert("Error en pago");
-    }
+console.log("Respuesta:", data);
+
+if (data.checkoutUrl) {
+  window.location.href = data.checkoutUrl;
+} else {
+  alert(JSON.stringify(data));
+}
 
   } catch (e) {
     alert(e.message);
