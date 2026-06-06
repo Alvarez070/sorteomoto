@@ -34,7 +34,7 @@ exports.handler = async (event) => {
       },
       {
         headers: {
-          Authorization: "Bearer TU_PUBLIC_KEY_SANDBOX"
+          Authorization: "Bearer prv_test_x2oEtJxKeTq3yMuVoYhmHSb9SzXNxI17"
         }
       }
     );
@@ -57,4 +57,4 @@ exports.handler = async (event) => {
       })
     };
   }
-};
+};s
